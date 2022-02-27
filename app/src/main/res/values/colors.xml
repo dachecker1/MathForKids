@@ -11,4 +11,11 @@
     <color name="easy_color">#C62ACD23</color>
     <color name="normal_color">#FFA505</color>
     <color name="hard_color">#F42121</color>
+
+    <color name="option_color_1">#F87070</color>
+    <color name="option_color_2">#D8954E</color>
+    <color name="option_color_3">#7DA842</color>
+    <color name="option_color_4">#3C82B1</color>
+    <color name="option_color_5">#419E88</color>
+    <color name="option_color_6">#A75AB8</color>
 </resources>
