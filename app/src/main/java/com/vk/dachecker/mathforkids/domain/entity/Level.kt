@@ -1,6 +1,8 @@
 package com.vk.dachecker.mathforkids.domain.entity
 
-enum class Level {
+import java.io.Serializable
+
+enum class Level : Serializable{
     TEST,
     EASY,
     NORMAL,
