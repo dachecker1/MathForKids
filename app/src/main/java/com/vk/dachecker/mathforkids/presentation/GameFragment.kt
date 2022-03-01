@@ -20,10 +20,12 @@ import com.vk.dachecker.mathforkids.domain.entity.Level
 
 class GameFragment : Fragment() {
 
+    private val viewModelFactory by lazy {GameViewModelFactory(requireActivity().application, level)}
+
     private val viewModel: GameViewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+            viewModelFactory
         )[GameViewModel::class.java]
     }
 
@@ -57,11 +59,9 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         observeViewModel()
         showQuestion()
         onClickListener()
-        viewModel.startGame(level)
     }
 
     private fun observeViewModel(){
