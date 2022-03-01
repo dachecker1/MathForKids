@@ -1,11 +1,17 @@
 package com.vk.dachecker.mathforkids.presentation
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.vk.dachecker.mathforkids.R
 import com.vk.dachecker.mathforkids.databinding.FragmentGameBinding
@@ -14,17 +20,31 @@ import com.vk.dachecker.mathforkids.domain.entity.Level
 
 class GameFragment : Fragment() {
 
-    private lateinit var viewModel : GameViewModel
+    private val viewModel: GameViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[GameViewModel::class.java]
+    }
+
+    private val tvOptions by lazy {
+        mutableListOf<TextView>().apply {
+            add(binding.tvOption1)
+            add(binding.tvOption2)
+            add(binding.tvOption3)
+            add(binding.tvOption4)
+            add(binding.tvOption5)
+            add(binding.tvOption6)
+        }
+    }
     private lateinit var level: Level
-    private var _binding : FragmentGameBinding? = null
+    private var _binding: FragmentGameBinding? = null
     private val binding: FragmentGameBinding
-    get() = _binding ?: throw RuntimeException("FragmentGameBinding == null")
+        get() = _binding ?: throw RuntimeException("FragmentGameBinding == null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArgs()
-        viewModel = ViewModelProvider(this)[GameViewModel::class.java]
-
     }
 
     override fun onCreateView(
@@ -37,78 +57,73 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        printNumbers()
-        getAnswers()
+
+        observeViewModel()
+        showQuestion()
+        onClickListener()
+        viewModel.startGame(level)
     }
 
-    private fun getAnswers() {
-        binding.run {
-            tvOption1.setOnClickListener {
-                val number = tvOption1.text.toString().toInt()
-                val rightAnswer = tvSum.text.toString().toInt() - tvLeftNumber.text.toString().toInt()
-                if(rightAnswer == number){
-                    Toast.makeText(context, "правильный ответ", Toast.LENGTH_LONG).show()
-                }
-                printNumbers()
+    private fun observeViewModel(){
+        viewModel.formattedTime.observe(viewLifecycleOwner) {
+            binding.tvTimer.text = it
+        }
+        viewModel.gameResult.observe(viewLifecycleOwner){
+            launchGameFinishedFragment(it)
+        }
+
+        viewModel.percentOfRightAnswers.observe(viewLifecycleOwner) {
+            binding.pbLine.setProgress(it, true)
+        }
+
+        viewModel.enoughCountOfRightAnswers.observe(viewLifecycleOwner){
+            binding.tvProgress.setTextColor(getColorByState(it))
+        }
+
+        viewModel.enoughPercentOfRightAnswers.observe(viewLifecycleOwner){
+            val color = getColorByState(it)
+            binding.pbLine.progressTintList = ColorStateList.valueOf(color)
+        }
+
+        viewModel.minPercent.observe(viewLifecycleOwner){
+            binding.pbLine.secondaryProgress = it
+        }
+
+        viewModel.progressAnswers.observe(viewLifecycleOwner){
+            binding.tvProgress.text = it
+        }
+    }
+
+    private fun getColorByState(flag: Boolean) : Int {
+        val colorResId = if (flag){
+            android.R.color.holo_green_dark
+        } else {
+            android.R.color.holo_orange_dark
+        }
+        return ContextCompat.getColor(requireContext(), colorResId)
+    }
+
+    private fun showQuestion(){
+        viewModel.question.observe(viewLifecycleOwner){ question ->
+            binding.run{
+                tvLeftNumber.text = question.visibleNumber.toString()
+                tvSum.text = question.sum.toString()
             }
-            tvOption2.setOnClickListener {
-                val number = tvOption2.text.toString().toInt()
-                val rightAnswer = tvSum.text.toString().toInt() - tvLeftNumber.text.toString().toInt()
-                if(rightAnswer == number){
-                    Toast.makeText(context, "правильный ответ", Toast.LENGTH_LONG).show()
-                }
-                printNumbers()
-            }
-            tvOption3.setOnClickListener {
-                val number = tvOption3.text.toString().toInt()
-                val rightAnswer = tvSum.text.toString().toInt() - tvLeftNumber.text.toString().toInt()
-                if(rightAnswer == number){
-                    Toast.makeText(context, "правильный ответ", Toast.LENGTH_LONG).show()
-                }
-                printNumbers()
-            }
-            tvOption4.setOnClickListener {
-                val number = tvOption4.text.toString().toInt()
-                val rightAnswer = tvSum.text.toString().toInt() - tvLeftNumber.text.toString().toInt()
-                if(rightAnswer == number){
-                    Toast.makeText(context, "правильный ответ", Toast.LENGTH_LONG).show()
-                }
-                printNumbers()
-            }
-            tvOption5.setOnClickListener {
-                val number = tvOption1.text.toString().toInt()
-                val rightAnswer = tvSum.text.toString().toInt() - tvLeftNumber.text.toString().toInt()
-                if(rightAnswer == number){
-                    Toast.makeText(context, "правильный ответ", Toast.LENGTH_LONG).show()
-                }
-                printNumbers()
-            }
-            tvOption6.setOnClickListener {
-                val number = tvOption1.text.toString().toInt()
-                val rightAnswer = tvSum.text.toString().toInt() - tvLeftNumber.text.toString().toInt()
-                if(rightAnswer == number){
-                    Toast.makeText(context, "правильный ответ", Toast.LENGTH_LONG).show()
-                }
-                printNumbers()
+            for(i in 0 until tvOptions.size){
+                tvOptions[i].text = question.options[i].toString()
             }
         }
     }
 
-    private fun printNumbers(){
-        val question = viewModel.getQuestion(level)
-        binding.run {
-            tvSum.text = question.sum.toString()
-            tvLeftNumber.text = question.visibleNumber.toString()
-            tvOption1.text = question.options[0].toString()
-            tvOption2.text = question.options[1].toString()
-            tvOption3.text = question.options[2].toString()
-            tvOption4.text = question.options[3].toString()
-            tvOption5.text = question.options[4].toString()
-            tvOption6.text = question.options[5].toString()
+    private fun onClickListener(){
+        for(tvOption in tvOptions){
+            tvOption.setOnClickListener {
+                viewModel.chooseAnswer(tvOption.text.toString().toInt())
+            }
         }
     }
 
-    private fun launchGameFinishedFragment(gameResult: GameResult){
+    private fun launchGameFinishedFragment(gameResult: GameResult) {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.mainContainer, GameFinishedFragment.newInstance(gameResult))
             .addToBackStack(null)
@@ -120,7 +135,7 @@ class GameFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseArgs(){
+    private fun parseArgs() {
         requireArguments().getParcelable<Level>(LEVEL_KEY)?.let {
             level = it
         }
@@ -131,7 +146,7 @@ class GameFragment : Fragment() {
         private const val LEVEL_KEY = "level"
 
         @JvmStatic
-        fun newInstance(level:Level) : GameFragment{
+        fun newInstance(level: Level): GameFragment {
             return GameFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(LEVEL_KEY, level)
