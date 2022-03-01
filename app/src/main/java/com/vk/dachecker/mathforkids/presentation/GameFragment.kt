@@ -90,6 +90,7 @@ class GameFragment : Fragment() {
         }
 
         viewModel.progressAnswers.observe(viewLifecycleOwner){
+            Log.d("Mytag", "progress Answers Observe $it")
             binding.tvProgress.text = it
         }
     }
