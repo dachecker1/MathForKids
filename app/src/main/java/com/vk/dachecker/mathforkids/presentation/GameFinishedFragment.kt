@@ -38,17 +38,18 @@ class GameFinishedFragment : Fragment() {
     }
 
     private fun showResult() {
-        binding.tvAnswers.text = String.format(
-            getString(R.string.tv_answers_result),
-            args.gameResult.gameSettings.minCountOfRightAnswers
-        )
-        binding.tvCount.text =
-            String.format(getString(R.string.tv_count_result),
-                args.gameResult.countOfRightAnswers)
-        binding.tvPercent.text = String.format(
-            getString(R.string.tv_percent_result),
-            args.gameResult.gameSettings.minPercentOnRightAnswers
-        )
+        binding.gameResult = args.gameResult
+//        binding.tvAnswers.text = String.format(
+//            getString(R.string.tv_answers_result),
+//            args.gameResult.gameSettings.minCountOfRightAnswers
+//        )
+//        binding.tvCount.text =
+//            String.format(getString(R.string.tv_count_result),
+//                args.gameResult.countOfRightAnswers)
+//        binding.tvPercent.text = String.format(
+//            getString(R.string.tv_percent_result),
+//            args.gameResult.gameSettings.minPercentOnRightAnswers
+//        )
         binding.tvYourPercent.text =
             String.format(getString(R.string.tv_your_percent_result),
                 getPercentOfRightsAnswers())

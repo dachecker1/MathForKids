@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="gameResult"
+            type="com.vk.dachecker.mathforkids.domain.entity.GameResult" />
+    </data>
+
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,21 +27,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/tv_answers_result" />
+        android:text="@{gameResult.gameSettings.minCountOfRightAnswersString}" />
 
     <TextView
         android:id="@+id/tvCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/tv_count_result" />
+        android:text="@{gameResult.countOfRightAnswersString}" />
 
     <TextView
         android:id="@+id/tvPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/tv_percent_result" />
+        android:text="@{gameResult.gameSettings.minPercentOnRightAnswersString}" />
 
     <TextView
         android:id="@+id/tvYourPercent"
@@ -50,3 +57,4 @@
         android:text="@string/try_again" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
