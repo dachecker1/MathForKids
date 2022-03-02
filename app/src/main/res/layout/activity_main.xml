@@ -5,6 +5,8 @@
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.vk.dachecker.mathforkids.presentation.WelcomeFragment"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    app:navGraph="@navigation/main_navigation"
+    app:defaultNavHost="true"
     tools:context=".presentation.MainActivity"
     />
