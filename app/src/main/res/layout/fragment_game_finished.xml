@@ -20,35 +20,40 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_lose" />
+        app:isWinner="@{gameResult.winner}"
+        android:src="@drawable/ic_win"
+         />
 
     <TextView
         android:id="@+id/tvAnswers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@{gameResult.gameSettings.minCountOfRightAnswersString}" />
+        app:requireAnswers="@{gameResult.gameSettings.minCountOfRightAnswers}"
+        />
 
     <TextView
         android:id="@+id/tvCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@{gameResult.countOfRightAnswersString}" />
+        app:requireCountOfRightAnswers="@{gameResult.countOfRightAnswers}"
+         />
 
     <TextView
         android:id="@+id/tvPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@{gameResult.gameSettings.minPercentOnRightAnswersString}" />
+        app:requirePercentOnRightAnswers="@{gameResult.gameSettings.minPercentOnRightAnswers}"
+        />
 
     <TextView
         android:id="@+id/tvYourPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/tv_your_percent_result" />
+        app:scorePercentage="@{gameResult}" />
 
     <Button
         android:id="@+id/btnTryAgain"

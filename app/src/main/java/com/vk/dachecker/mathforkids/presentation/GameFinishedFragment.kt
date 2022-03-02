@@ -30,40 +30,10 @@ class GameFinishedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showResult()
+        binding.gameResult = args.gameResult
 
         binding.btnTryAgain.setOnClickListener {
             retryGame()
-        }
-    }
-
-    private fun showResult() {
-        binding.gameResult = args.gameResult
-//        binding.tvAnswers.text = String.format(
-//            getString(R.string.tv_answers_result),
-//            args.gameResult.gameSettings.minCountOfRightAnswers
-//        )
-//        binding.tvCount.text =
-//            String.format(getString(R.string.tv_count_result),
-//                args.gameResult.countOfRightAnswers)
-//        binding.tvPercent.text = String.format(
-//            getString(R.string.tv_percent_result),
-//            args.gameResult.gameSettings.minPercentOnRightAnswers
-//        )
-        binding.tvYourPercent.text =
-            String.format(getString(R.string.tv_your_percent_result),
-                getPercentOfRightsAnswers())
-
-        if (args.gameResult.winner) {
-            binding.imResult.setImageResource(R.drawable.ic_win)
-        }
-    }
-
-    private fun getPercentOfRightsAnswers() = with(args.gameResult) {
-        if (countOfQuestion == 0) {
-            0
-        } else {
-            ((countOfRightAnswers / countOfQuestion.toDouble()) * 100).toInt()
         }
     }
 
