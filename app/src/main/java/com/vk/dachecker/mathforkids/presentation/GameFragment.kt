@@ -62,60 +62,15 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         observeViewModel()
-        showQuestion()
         onClickListener()
     }
 
     private fun observeViewModel() {
-        viewModel.formattedTime.observe(viewLifecycleOwner) {
-            binding.tvTimer.text = it
-        }
         viewModel.gameResult.observe(viewLifecycleOwner) {
             launchGameFinishedFragment(it)
-        }
-
-        viewModel.percentOfRightAnswers.observe(viewLifecycleOwner) {
-            binding.pbLine.setProgress(it, true)
-        }
-
-        viewModel.enoughCountOfRightAnswers.observe(viewLifecycleOwner) {
-            binding.tvProgress.setTextColor(getColorByState(it))
-        }
-
-        viewModel.enoughPercentOfRightAnswers.observe(viewLifecycleOwner) {
-            val color = getColorByState(it)
-            binding.pbLine.progressTintList = ColorStateList.valueOf(color)
-        }
-
-        viewModel.minPercent.observe(viewLifecycleOwner) {
-            binding.pbLine.secondaryProgress = it
-        }
-
-        viewModel.progressAnswers.observe(viewLifecycleOwner) {
-            Log.d("Mytag", "progress Answers Observe $it")
-            binding.tvProgress.text = it
-        }
-    }
-
-    private fun getColorByState(flag: Boolean): Int {
-        val colorResId = if (flag) {
-            android.R.color.holo_green_dark
-        } else {
-            android.R.color.holo_orange_dark
-        }
-        return ContextCompat.getColor(requireContext(), colorResId)
-    }
-
-    private fun showQuestion() {
-        viewModel.question.observe(viewLifecycleOwner) { question ->
-            binding.run {
-                tvLeftNumber.text = question.visibleNumber.toString()
-                tvSum.text = question.sum.toString()
-            }
-            for (i in 0 until tvOptions.size) {
-                tvOptions[i].text = question.options[i].toString()
-            }
         }
     }
 
